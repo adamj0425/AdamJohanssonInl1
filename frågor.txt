@@ -1,0 +1,116 @@
+Jag siktar på VG
+
+-När använder man add respektive commit?
+
+ Add används när man vill lägga till något i "staging area".
+ Commit tar allt från "staging area" och sparar en permanent version av ditt repository vid 
+ tiden för commiten. 
+
+-Vad är pull repektive push?
+   
+ Med push laddar du upp ditt nuvarande repository till Github, med pull laddar du ner ett 
+ repository från Github.
+
+-När använder man log respektive status?
+
+Log visar historiken av alla commits som gjort i ditt repository.
+Status visar om det finns filer i ditt repository som kan addas till staging area eller 
+commitas.
+
+-Vad är en Git branch och varför är de viktiga?
+ När du skapar en ny branch i ditt repository blir den en kopia av ditt nuvarande repository vilket tillåter dig att jobba vidare med ditt projekt parallellt utan att påverka master-branchen. Nya commits som görs kommer inte att förändra ditt projekt i master-branchen förrän du väljer att merga din nya branch med master branchen.   
+
+
+Vg-fråga:
+Jag har här skapat en ny branch "vgbranch" och sedan skapat en readme-fil, lagt till fem rader text och gjort en ny commit efter varje rad.
+
+0c94a87 Added the fifth line
+a9f9b32 Added the fourth line
+5f835a6 Added the third line
+e443fae Added the second line
+366b503 Added the first line
+2c5d8d0 Created a readme-file
+
+Git Checkout:
+Låter dig gå tillbaks och se hur din kod såg ut vid en viss commit. Bra att använda om du bara vill veta hur något såg ut vid en viss tidpunkt men inte vill ändra något. 
+
+Meddelande:
+git checkout 5f835a6
+Note: switching to '5f835a6'.
+HEAD is now at 5f835a6 Added the third line
+
+Git Revert:
+Tar bort ändringar som gjordes vid en specifik commit och skapar en ny commit. Den gamla commiten ligger dock kvar i historiken och går att återvända till. Bra när man bara vill ta bort en specifik sak i sin fil eller program. 
+Jag skriver in git revert 0c94a87
+
+Meddelande:
+
+Revert "Added the fifth line"
+
+This reverts commit 0c94a870373673245175bcb1f199e0de55f8dc48.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+#
+# Committer: Adam Johansson <adam0425@MacBook-Air-som-tillhor-Adam.local>
+#
+# On branch vgbranch
+# Changes to be committed:
+#       modified:   readme.txt
+#
+# Untracked files:
+#       "fr\303\245gor.txt"
+
+
+Nu när jag öppnar filen så är rad fem borta och kör jag en git log så ser det ut såhär:
+eaf1b10 (HEAD -> vgbranch) Revert "Added the fifth line"
+0c94a87 Added the fifth line
+a9f9b32 Added the fourth line
+5f835a6 Added the third line
+e443fae Added the second line
+366b503 Added the first line
+2c5d8d0 Created a readme-file
+
+För att ångra reverten kan jag antingen göra en ny revert eller en reset.
+
+Git reset soft:
+När du skriver git reset soft + ett commit-id så flyttas head tillbaks till den utvalda commiten och alla commits som gjorts efteråt tas bort. 
+Ändringarna finns dock fortfarande sparade i staging area så om du fortfarande vill göra dom ändringarna så kan du bara commita på nytt.
+
+Meddelande:
+
+git reset --soft 5f835a6
+
+On branch vgbranch
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   readme.txt
+
+Om jag nu gör en git log så ser jag att alla commits som gjordes efter är borta men ändringarna i readme-filen är fortfarande kvar och är redo att commitas.
+Kan användas om du t.ex. vill slå ihop flera commits till en ny commit.
+
+Git reset/git reset mixed:
+Gör samma sak som soft men här tas ändringarna också bort ifrån staging area, så vill man ha kvar ändringarna behöver man adda och sen commita.
+
+Meddelande:
+
+git reset --mixed e443fae
+Unstaged changes after reset:
+M	readme.txt
+
+Kan användas om du t.ex. vill göra om flera commits till två eller fler nya commits.
+
+Git reset hard:
+När du gör en git reset hard så flyttar du precis som i soft och mixed tillbaks HEAD till den valda commiten, men här tar du också bort alla ändringar som gjorts i filen permanent och vill du få tillbaks dom så måste du skriva om dom från början.
+
+Meddelande:
+
+git reset --hard 2c5d8d0
+HEAD is now at 2c5d8d0 Created a readme-file
+
+När jag nu gjorde en reset hard så flyttades HEAD tillbaks till när jag skapade filen, alla commits togs bort och all text försvann i dokumentet.
+
+Kan användas om du helt enkelt vill ta bort alla ändringar som gjort efter en viss commit och börja om därifrån.
+
+
+
